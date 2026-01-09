@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Opinion Universe Sdk"
 include(":app")
-include(":opinion-universe-sdk")
+include(":sdk")

@@ -1,4 +1,4 @@
-package com.opinionuniverse.opinionuniversesdk
+package com.opinionuniverse.sample
 
 import android.os.Bundle
 import android.util.Log
@@ -7,6 +7,7 @@ import androidx.lifecycle.lifecycleScope
 import com.opinionuniverse.sdk.OpinionUniverse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext // Added this import
 
 class MainActivity : AppCompatActivity() {
 
@@ -14,30 +15,40 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // 1. Initialize the SDK (Do this once, e.g., when app starts)
-        val myPubId = "16"
-        val myAppId = "ID_241d2f6907795bff19dc741ac40fabff"
-        OpinionUniverse.init(myPubId, myAppId)
+        // Calling the function so it actually runs when the app starts
+        loadSdkData()
+    }
 
-        // 2. The dynamic Key (could come from your backend or config)
-        val myUserKey = "61ed8cf1d77421a82cff3a2f24b9afdfca4ffde1f530cd8b"
+    private fun loadSdkData() {
+        // 1. Initialize with placeholders for the client
+        // Provide these to your client separately
+        val publisherId = "YOUR_PUBLISHER_ID"
+        val appId = "YOUR_APP_ID"
+        OpinionUniverse.init(publisherId, appId)
+
+        val userKey = "USER_DYNAMIC_KEY"
 
         lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                // --- 1. Fetch Apps/Offers ---
+                val apps = OpinionUniverse.getOffers(key = userKey)
 
-            // --- Fetch Apps ---
-            Log.d("SDK_APP", "--- Fetching Apps ---")
-            val apps = OpinionUniverse.getOffers(key = myUserKey)
-            Log.d("SDK_APP", "✅ Apps Loaded: ${apps.size}")
-            apps.take(3).forEach {
-                Log.d("SDK_APP", "   📱 ${it}")
-            }
+                withContext(Dispatchers.Main) {
+                    // This is where the client would update a RecyclerView or UI
+                    Log.d("OpinionUniverse", "✅ Apps Loaded: ${apps.size}")
+                }
 
-            // --- Fetch Surveys ---
-            Log.d("SDK_APP", "--- Fetching Surveys ---")
-            val surveys = OpinionUniverse.getSurveys(key = myUserKey)
-            Log.d("SDK_APP", "✅ Surveys Loaded: ${surveys.size}")
-            surveys.take(3).forEach {
-                Log.d("SDK_APP", "   📝 ${it}")
+                // --- 2. Fetch Surveys ---
+                val surveys = OpinionUniverse.getSurveys(key = userKey)
+
+                withContext(Dispatchers.Main) {
+                    Log.d("OpinionUniverse", "✅ Surveys Loaded: ${surveys.size}")
+                }
+
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Log.e("OpinionUniverse", "❌ Error loading data: ${e.message}")
+                }
             }
         }
     }

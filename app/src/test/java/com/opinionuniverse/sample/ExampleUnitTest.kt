@@ -1,4 +1,4 @@
-package com.opinionuniverse.opinionuniversesdk
+package com.opinionuniverse.sample
 
 import org.junit.Test
 

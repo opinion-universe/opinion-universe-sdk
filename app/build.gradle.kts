@@ -4,13 +4,13 @@ plugins {
 }
 
 android {
-    namespace = "com.example.opinionuniversesdk"
+    namespace = "com.opinionuniverse.sample"
     compileSdk {
         version = release(35)
     }
 
     defaultConfig {
-        applicationId = "com.example.opinionuniversesdk"
+        applicationId = "com.opinionuniverse.sample"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
@@ -44,7 +44,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-    implementation(project(":opinion-universe-sdk"))
+    implementation(project(":sdk"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
